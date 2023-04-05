@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "1.8.20"
     id("io.ktor.plugin") version "2.2.4"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
+    id("maven-publish")
 }
 
 group = "ndy.ktor.context"
@@ -34,4 +35,18 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            artifactId = "ktor-server-context"
+            from(components["java"])
+            pom {
+                name.set("Ktor context receiver")
+                description.set("Ktor support with context receiver")
+                url.set("https://github.com/ndy2/ktor-server-context")
+            }
+        }
+    }
 }
