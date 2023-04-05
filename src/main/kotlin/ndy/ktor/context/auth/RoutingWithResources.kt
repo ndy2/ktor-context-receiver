@@ -15,21 +15,24 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.patch
 import io.ktor.util.pipeline.PipelineContext
 
-suspend inline fun <reified T : Any> PipelineContext<Unit, ApplicationCall>.run(
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (T) -> Unit,
+suspend inline fun <reified T : Any, reified A : Principal> PipelineContext<Unit, ApplicationCall>.run(
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (T) -> Unit,
     call: ApplicationCall,
     it: T
-): Unit = build(authenticationContext(call.authentication), applicationCallContext(call), it)
+) {
+
+    build(authenticationContext(call.authentication), applicationCallContext(call), it)
+}
 
 
 /**
  * combines `authenticate` & `get<T>`
  * A class [T] **must** be annotated with [io.ktor.resources.Resource].
  */
-inline fun <reified T : Any> Route.authenticatedGet(
+inline fun <reified T : Any, reified A : Principal> Route.authenticatedGet(
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (T) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (T) -> Unit
 ) = authenticate(configurations = configurations, optional = optional) {
     get<T> {
         this.run(build, call, it)
@@ -40,10 +43,10 @@ inline fun <reified T : Any> Route.authenticatedGet(
  * combines `authenticate` & `options<T>`
  * A class [T] **must** be annotated with [io.ktor.resources.Resource].
  */
-inline fun <reified T : Any> Route.authenticatedOptions(
+inline fun <reified T : Any, reified A : Principal> Route.authenticatedOptions(
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (T) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (T) -> Unit
 ) = authenticate(configurations = configurations, optional = optional) {
     options<T> {
         this.run(build, call, it)
@@ -54,10 +57,10 @@ inline fun <reified T : Any> Route.authenticatedOptions(
  * combines `authenticate` & `head<T>`
  * A class [T] **must** be annotated with [io.ktor.resources.Resource].
  */
-inline fun <reified T : Any> Route.authenticatedHead(
+inline fun <reified T : Any, reified A : Principal> Route.authenticatedHead(
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (T) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (T) -> Unit
 ) = authenticate(configurations = configurations, optional = optional) {
     head<T> {
         this.run(build, call, it)
@@ -68,10 +71,10 @@ inline fun <reified T : Any> Route.authenticatedHead(
  * combines `authenticate` & `post<T>`
  * A class [T] **must** be annotated with [io.ktor.resources.Resource].
  */
-inline fun <reified T : Any> Route.authenticatedPost(
+inline fun <reified T : Any, reified A : Principal> Route.authenticatedPost(
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (T) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (T) -> Unit
 ) = authenticate(configurations = configurations, optional = optional) {
     post<T> {
         this.run(build, call, it)
@@ -82,10 +85,10 @@ inline fun <reified T : Any> Route.authenticatedPost(
  * combines `authenticate` & `put<T>`
  * A class [T] **must** be annotated with [io.ktor.resources.Resource].
  */
-inline fun <reified T : Any> Route.authenticatedPut(
+inline fun <reified T : Any, reified A : Principal> Route.authenticatedPut(
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (T) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (T) -> Unit
 ) = authenticate(configurations = configurations, optional = optional) {
     put<T> {
         this.run(build, call, it)
@@ -96,10 +99,10 @@ inline fun <reified T : Any> Route.authenticatedPut(
  * combines `authenticate` & `delete<T>`
  * A class [T] **must** be annotated with [io.ktor.resources.Resource].
  */
-inline fun <reified T : Any> Route.authenticatedDelete(
+inline fun <reified T : Any, reified A : Principal> Route.authenticatedDelete(
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (T) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (T) -> Unit
 ) = authenticate(configurations = configurations, optional = optional) {
     delete<T> {
         this.run(build, call, it)
@@ -110,10 +113,10 @@ inline fun <reified T : Any> Route.authenticatedDelete(
  * combines `authenticate` & `patch<T>`
  * A class [T] **must** be annotated with [io.ktor.resources.Resource].
  */
-inline fun <reified T : Any> Route.authenticatedPatch(
+inline fun <reified T : Any, reified A : Principal> Route.authenticatedPatch(
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (T) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (T) -> Unit
 ) = authenticate(configurations = configurations, optional = optional) {
     patch<T> {
         this.run(build, call, it)

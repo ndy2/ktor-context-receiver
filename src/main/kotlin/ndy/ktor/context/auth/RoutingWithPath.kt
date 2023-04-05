@@ -17,11 +17,11 @@ import io.ktor.server.routing.put
 /**
  * combines 'authenticate` & `get`
  */
-inline fun Route.authenticatedGet(
+inline fun <reified A : Principal> Route.authenticatedGet(
     path: String,
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (Unit) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (Unit) -> Unit
 ) {
     authenticate(configurations = configurations, optional = optional) {
         get(path) {
@@ -33,11 +33,11 @@ inline fun Route.authenticatedGet(
 /**
  * combines 'authenticate` & `options`
  */
-inline fun Route.authenticatedOptions(
+inline fun <reified A : Principal> Route.authenticatedOptions(
     path: String,
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (Unit) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (Unit) -> Unit
 ) {
     authenticate(configurations = configurations, optional = optional) {
         options(path) {
@@ -49,11 +49,11 @@ inline fun Route.authenticatedOptions(
 /**
  * combines 'authenticate` & `head`
  */
-inline fun Route.authenticatedHead(
+inline fun <reified A : Principal> Route.authenticatedHead(
     path: String,
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (Unit) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (Unit) -> Unit
 ) {
     authenticate(configurations = configurations, optional = optional) {
         head(path) {
@@ -65,11 +65,11 @@ inline fun Route.authenticatedHead(
 /**
  * combines 'authenticate` & `post`
  */
-inline fun Route.authenticatedPost(
+inline fun <reified A : Principal> Route.authenticatedPost(
     path: String,
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (Unit) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (Unit) -> Unit
 ) {
     authenticate(configurations = configurations, optional = optional) {
         post(path) {
@@ -81,11 +81,11 @@ inline fun Route.authenticatedPost(
 /**
  * combines 'authenticate` & `put`
  */
-inline fun Route.authenticatedPut(
+inline fun <reified A : Principal> Route.authenticatedPut(
     path: String,
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (Unit) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (Unit) -> Unit
 ) {
     authenticate(configurations = configurations, optional = optional) {
         put(path) {
@@ -97,11 +97,11 @@ inline fun Route.authenticatedPut(
 /**
  * combines 'authenticate` & `delete`
  */
-inline fun Route.authenticatedDelete(
+inline fun <reified A : Principal> Route.authenticatedDelete(
     path: String,
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (Unit) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (Unit) -> Unit
 ) {
     authenticate(configurations = configurations, optional = optional) {
         delete(path) {
@@ -113,11 +113,11 @@ inline fun Route.authenticatedDelete(
 /**
  * combines 'authenticate` & `patch`
  */
-inline fun Route.authenticatedPatch(
+inline fun <reified A : Principal> Route.authenticatedPatch(
     path: String,
     vararg configurations: String? = arrayOf(null),
     optional: Boolean = false,
-    crossinline build: suspend context(AuthenticationContext<Principal>, ApplicationCallContext) (Unit) -> Unit
+    crossinline build: suspend context(AuthenticationContext<A>, ApplicationCallContext) (Unit) -> Unit
 ) {
     authenticate(configurations = configurations, optional = optional) {
         patch(path) {

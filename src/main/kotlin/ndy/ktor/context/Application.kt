@@ -7,13 +7,13 @@ import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.UserIdPrincipal
 import io.ktor.server.auth.basic
-import io.ktor.server.auth.principal
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.resources.Resources
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
+import ndy.ktor.context.auth.AuthenticationContext
 import ndy.ktor.context.auth.authenticatedGet
 
 fun main() {
@@ -35,15 +35,15 @@ fun Application.module() {
         }
 
         // ktor-resource, with default auth
-        authenticatedGet<Articles> {
-            call.respondText("name : ${call.principal<UserIdPrincipal>()!!.name}")
-        }
-
-        // ktor-resource, with default auth
-        authenticatedGet<Profiles>("basic") {
-            call.respondText("name : ${call.principal<UserIdPrincipal>()!!.name}")
+        authenticatedGet<Articles, UserIdPrincipal> {
+            call.respondText("name : ${reverseUserId()}")
         }
     }
+}
+
+context(AuthenticationContext<UserIdPrincipal>)
+fun reverseUserId(): String {
+    return principal.name.reversed()
 }
 
 @Resource("/articles")
