@@ -8,10 +8,10 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
 }
 
-group = "ndy.ktor.auth"
+group = "ndy.ktor.context"
 version = "0.0.1"
 application {
-    mainClass.set("auth.ktor.ndy.ApplicationKt")
+    mainClass.set("ndy.ktor.context.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -19,6 +19,11 @@ application {
 
 repositories {
     mavenCentral()
+}
+
+// ref - https://youtu.be/GISPalIVdQY
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.freeCompilerArgs = listOf("-Xcontext-receivers")
 }
 
 dependencies {
